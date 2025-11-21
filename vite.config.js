@@ -6,7 +6,8 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     define: {
-      // If API_KEY is missing, default to empty string to prevent crash on undefined access
+      // Polyfill process.env for the code usage
+      'process.env': JSON.stringify(env),
       'process.env.API_KEY': JSON.stringify(env.API_KEY || '')
     }
   }
