@@ -1,8 +1,17 @@
 import { GoogleGenAI } from "@google/genai";
 
-// Initialize Gemini API Client
-// API Key is expected to be in process.env.API_KEY
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Initialize Gemini API Client securely
+// Prevent app crash if API_KEY is missing in environment
+const apiKey = process.env.API_KEY;
+let ai: GoogleGenAI | null = null;
+
+if (apiKey) {
+  try {
+    ai = new GoogleGenAI({ apiKey });
+  } catch (error) {
+    console.error("Failed to initialize Gemini Client:", error);
+  }
+}
 
 const SYSTEM_INSTRUCTION = `
 당신은 '쌍마타일(Ssangma Tile)'의 전문 AI 상담원입니다. 
@@ -24,14 +33,13 @@ export const generateConsultationResponse = async (
   history: { role: string; text: string }[],
   newMessage: string
 ): Promise<string> => {
-  try {
-    const model = 'gemini-2.5-flash'; // Using Flash for fast interactive chat
+  if (!ai) {
+    return "현재 상담 시스템 점검 중입니다. (API Key 미설정) 전화로 문의해 주시면 친절히 안내해 드리겠습니다.";
+  }
 
-    // Format history for the API (API expects 'user' and 'model' roles)
-    // Note: The @google/genai Chat helper manages history, but for a stateless-like service call
-    // or if we want full control, we can reconstruct it or use the chat helper.
-    // Here, let's use the Chat helper for a simple session.
-    
+  try {
+    const model = 'gemini-2.5-flash'; 
+
     const chat = ai.chats.create({
       model: model,
       config: {
@@ -44,9 +52,9 @@ export const generateConsultationResponse = async (
     });
 
     const result = await chat.sendMessage({ message: newMessage });
-    return result.text || "죄송합니다. 일시적인 오류로 답변을 드릴 수 없습니다. 잠시 후 다시 시도해 주세요.";
+    return result.text || "죄송합니다. 답변을 생성하는 데 문제가 발생했습니다.";
   } catch (error) {
     console.error("Gemini API Error:", error);
-    return "죄송합니다. 현재 상담 시스템에 연결할 수 없습니다.";
+    return "죄송합니다. 현재 상담 시스템에 일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.";
   }
 };
