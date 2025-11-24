@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import AdminDashboard from './AdminDashboard';
 
-const Contact: React.FC = () => {
+interface ContactProps {
+  onOpenModal: () => void;
+}
+
+const Contact: React.FC<ContactProps> = ({ onOpenModal }) => {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   return (
@@ -25,7 +29,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">전화 문의</h3>
-                  <p className="text-slate-300 text-xl mt-1">010-3631-3152</p>
+                  <p className="text-slate-300 text-xl mt-1">010-5462-3151</p>
                   <p className="text-sm text-slate-500">평일/토요일 09:00 ~ 18:00</p>
                 </div>
               </div>
@@ -38,7 +42,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">이메일</h3>
-                  <p className="text-slate-300 mt-1">s601108@naver.com</p>
+                  <p className="text-slate-300 mt-1">jww1088@gmail.com</p>
                 </div>
               </div>
 
@@ -72,15 +76,15 @@ const Contact: React.FC = () => {
                 >
                     당근마켓
                 </a>
-                <a 
-                    href="mailto:s601108@naver.com"
-                    className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition-colors flex items-center gap-2"
+                <button 
+                    onClick={onOpenModal}
+                    className="px-6 py-3 bg-[#FEE500] hover:bg-[#FDD835] text-[#3c1e1e] rounded-lg font-bold transition-colors flex items-center gap-2"
                 >
-                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3C6.48 3 2 6.48 2 10.76C2 13.56 3.93 16.06 6.93 17.44L6.14 20.36C6.07 20.62 6.35 20.85 6.59 20.7L10.37 18.2C10.9 18.26 11.44 18.29 12 18.29C17.52 18.29 22 14.81 22 10.53C22 6.24 17.52 3 12 3Z" />
                    </svg>
-                    이메일 문의
-                </a>
+                    카톡 문의
+                </button>
               </div>
             </div>
           </div>
